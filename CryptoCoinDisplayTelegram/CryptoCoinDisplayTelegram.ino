@@ -21,23 +21,39 @@
  *******************************************************************/
 
 #include <SPI.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_PCD8544.h>
-
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <WiFiClient.h>
+#include "FS.h"
+
+// ----------------------------
+// Additional Libraries - each one of these will need to be installed.
+// ----------------------------
+
+#include <Adafruit_GFX.h>
+// Required for the screen
+// Available on the library manager (Search for "Adafruit GFX")
+// https://github.com/adafruit/Adafruit-GFX-Library
+
+#include <Adafruit_PCD8544.h>
+// Required for the screen, this is a forked version of this library though
+// Download the zip of the repo and add that Sketch -> Include Library -> Add zip
+// https://github.com/WereCatf/Adafruit-PCD8544-Nokia-5110-LCD-library
 
 #include <CoinMarketCapApi.h>
-#include <UniversalTelegramBot.h>
+// For Integrating with the CoinMarketCap.com API
+// Available on the library manager (Search for "CoinMarket")
+// https://github.com/witnessmenow/arduino-coinmarketcap-api
 
+#include <UniversalTelegramBot.h>
+// For sending/recieving Telegram Messages
+// Available on the library manager (Search for "Universal Telegram")
+// https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
 
 #include <ArduinoJson.h>
-// For the config file
-// Available on the library manager (ArduinoJson)
-// https://github.com/bblanchon/ArduinoJson
-
-#include "FS.h"
+// Required by the CoinMarketCapApi Library for parsing the response
+// Available on the library manager (Search for "arduino json")
+// https://github.com/squix78/esp8266-oled-ssd1306
 
 Adafruit_PCD8544 display = Adafruit_PCD8544(D6, D8, D4);
 
@@ -117,8 +133,8 @@ char currency[10] = "eur";
 
 
 WiFiClientSecure secureClient;
-WiFiClient client;
-CoinMarketCapApi api(client);
+
+CoinMarketCapApi api(secureClient);
 UniversalTelegramBot bot(BOT_TOKEN, secureClient);
 
 // CoinMarketCap's limit is "no more than 10 per minute"
